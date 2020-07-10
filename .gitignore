@@ -1,0 +1,6 @@
+.DS_Store
+.idea
+db-data
+tmp
+go.sum
+docker-compose.yml

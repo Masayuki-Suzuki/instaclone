@@ -1,0 +1,7 @@
+config
+scripts
+src/types
+.babelrc
+.eslintrc.js
+.prettier.js
+tsconfig.json
