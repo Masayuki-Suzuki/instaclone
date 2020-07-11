@@ -2,11 +2,11 @@
 <html lang="en">
 <head>
     <meta charset="utf-8"/>
-    <!-- <link rel="icon" href="%PUBLIC_URL%/favicon.ico"/> -->
+    <!-- <link rel="icon" href="/favicon.ico"/> -->
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <meta
             name="description"
-            content="This is a personal project of clone Instagram."
+            content="{{.Description}}"
     />
     <!--
     <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png"/>
@@ -18,9 +18,30 @@
     -->
     <title>{{.Title}}</title>
 </head>
-<body>
+<body style="font-family:sans-serif; padding: 24px;">
     <noscript>You need to enable JavaScript to run this app.</noscript>
-    <h1>Instaclone Project</h1>
+    <h1>{{.PageTitle}}</h1>
+    <div>
+        {{range .Users}}
+            <div style="border-bottom: solid 1px #ccc;">
+                <h2 style="font-size: 20px">{{.Id}}. {{.First_name}} {{.Last_name}}</h2>
+                <p>Gender:
+                    {{if eq .Gender 0}}
+                        Male
+                    {{else}}
+                        {{if eq .Gender 1}}
+                            Female
+                        {{else}}
+                            Other
+                        {{end}}
+                    {{end}}
+                </p>
+                <p>Age: {{.Age}}</p>
+                </div>
+            </div>
+        {{end}}
+    </div>
     <div id="root"></div>
+    <script src="{{.ReactFilePath}}"></script>
 </body>
 </html>

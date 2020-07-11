@@ -1,9 +1,9 @@
 package main
 
 import (
-	"bytes"
 	"database/sql"
 	"fmt"
+	"html/template"
 	"log"
 	"net/http"
 	
@@ -14,16 +14,27 @@ import (
 var db *sql.DB
 var connectionError error
 
+type User struct {
+	Id			int
+	First_name	string
+	Last_name	string
+	Gender		int
+	Age			int
+}
+
 type SiteData struct {
-	Title       string
-	Description string
+	Title       	string
+	Description 	string
+	PageTitle		string
+	ReactFilePath	string
+	Users			[]User
 }
 
 const (
 	DRIVER_NAME = "mysql"
-	DB_NAME     = "test_db"
+	DB_NAME     = "test_db2"
 	// user:password@tcp(container-name:port)/dbname *mysql is a default DB
-	DATA_SOURCE_NAME = "root:thisisrootpassword@tcp(mariadb:3306)/mysql"
+	DATA_SOURCE_NAME = "root:thisisrootpassword@tcp(mariadb:3306)/" + DB_NAME
 )
 
 func init() {
@@ -34,9 +45,18 @@ func init() {
 	}
 }
 
+//func addDummyUser(w http.ResponseWriter, r *http.Request) {
+//	_, err := db.Query("insert into users (first_name, last_name, gender, age) values('Robert', 'Baratheon', 0 , 40) ")
+//	if err != nil {
+//		log.Print("Error: Execute database query: ", err)
+//		return
+//	}
+//	log.Fatalln(fmt.Fprint(w, "Added User? Should Back to index page."))
+//}
+
 func getIndexPage(w http.ResponseWriter, r *http.Request) {
 	// Get DB informations
-	rows, err := db.Query("SELECT SUBSTRING_INDEX(USER(), '@', -1) AS ip, @@hostname as hostname, @@port as port, DATABASE() as current_dtabase;")
+	rows, err := db.Query("select * from users")
 	
 	// Error Handling
 	if err != nil {
@@ -44,17 +64,47 @@ func getIndexPage(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	
-	// Create string buffer
-	var buffer bytes.Buffer
+	var users []User
 	
-	// Create string
 	for rows.Next() {
-		var ip, hostname, port, currentDatabase string
-		err = rows.Scan(&ip, &hostname, &port, &currentDatabase)
-		buffer.WriteString("IP:: " + ip + "\nHostName:: " + hostname + "\nPort:: " + port)
+		var first_name, last_name string
+		var id, gender, age int
+		err := rows.Scan(&id, &first_name, &last_name, &gender, &age)
+		
+		if err != nil {
+			log.Fatalln(err)
+		}
+		users = append(users, User{ id, first_name, last_name, gender, age })
 	}
 	
-	fmt.Fprint(w, buffer.String())
+	PageData := SiteData{
+		Title:       "Test",
+		Description: "This is test for DB connection, read and write.",
+		PageTitle:   "DB Data",
+		ReactFilePath: "",
+		Users:       users,
+	}
+	
+	t, err := template.ParseFiles("template/index.html.tpl")
+	if err != nil {
+		log.Fatal("Could not find template file: %v", err)
+	}
+	
+	if err := t.Execute(w, PageData); err != nil {
+		log.Printf("Failed to execute template: %v", err)
+	}
+	
+	// Create string buffer
+	//var buffer bytes.Buffer
+	
+	// Create string
+	//for rows.Next() {
+	//	var ip, hostname, port, currentDatabase string
+	//	err = rows.Scan(&ip, &hostname, &port, &currentDatabase)
+	//	buffer.WriteString("IP:: " + ip + "\nHostName:: " + hostname + "\nPort:: " + port)
+	//}
+	
+	//fmt.Fprint(w, "this is a test")
 }
 
 func testHandler (w http.ResponseWriter, r *http.Request) {
@@ -62,6 +112,8 @@ func testHandler (w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
+	defer db.Close()
+	
 	// Setup root directory
 	//fs := http.FileServer(http.Dir("public"))
 	
@@ -69,13 +121,13 @@ func main() {
 
 	// Add Routing: Access "/", shows public directory contents.
 	router.HandleFunc("/", getIndexPage)
+	//router.HandleFunc("/add", addDummyUser)
 	router.HandleFunc("/test", testHandler)
 	
 	http.Handle("/", router)
 
-	defer db.Close()
 	// Shows message.
-	fmt.Println("Server: Listening...")
+	fmt.Println("Server: Listening..")
 	
 	log.Fatal(http.ListenAndServe(":3000", nil))
 }
