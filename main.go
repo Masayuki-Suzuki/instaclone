@@ -8,6 +8,7 @@ import (
 	"net/http"
 	
 	_ "github.com/go-sql-driver/mysql"
+	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
 )
 
@@ -32,7 +33,7 @@ type SiteData struct {
 
 const (
 	DRIVER_NAME = "mysql"
-	DB_NAME     = "test_db2"
+	DB_NAME     = "test_db"
 	// user:password@tcp(container-name:port)/dbname *mysql is a default DB
 	DATA_SOURCE_NAME = "root:thisisrootpassword@tcp(mariadb:3306)/" + DB_NAME
 )
@@ -114,6 +115,12 @@ func testHandler (w http.ResponseWriter, r *http.Request) {
 func main() {
 	defer db.Close()
 	
+	// SetUp CORS
+	allowedOrigins := handlers.AllowedOrigins([]string{"http://localhots:8088"})
+	allowedMethods := handlers.AllowedMethods([]string{"GET", "POST", "DELETE", "PUT"})
+	allowedHeaders := handlers.AllowedHeaders([]string{"Authorization"})
+	
+	
 	// Setup root directory
 	//fs := http.FileServer(http.Dir("public"))
 	
@@ -124,10 +131,8 @@ func main() {
 	//router.HandleFunc("/add", addDummyUser)
 	router.HandleFunc("/test", testHandler)
 	
-	http.Handle("/", router)
-
 	// Shows message.
 	fmt.Println("Server: Listening..")
 	
-	log.Fatal(http.ListenAndServe(":3000", nil))
+	log.Fatal(http.ListenAndServe(":3000", handlers.CORS(allowedOrigins, allowedMethods, allowedHeaders)(router)))
 }
