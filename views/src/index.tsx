@@ -4,6 +4,7 @@ import ReactDOM from 'react-dom'
 import { applyMiddleware, compose, createStore } from 'redux'
 import { Provider } from 'react-redux'
 import { library } from '@fortawesome/fontawesome-svg-core'
+import { faCheckCircle, faTimesCircle } from '@fortawesome/free-regular-svg-icons'
 import { faGoogle } from '@fortawesome/free-brands-svg-icons'
 import thunk from 'redux-thunk'
 import reducers from './reducers'
@@ -20,7 +21,7 @@ const composeReduxDevToolsEnhancers =
 
 const store = createStore(reducers, composeReduxDevToolsEnhancers(applyMiddleware(thunk)))
 
-library.add(faGoogle)
+library.add(faGoogle, faCheckCircle, faTimesCircle)
 
 ReactDOM.render(
     <Provider store={store}>

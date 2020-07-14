@@ -2,7 +2,7 @@ import React from 'react'
 import { css } from '@emotion/core'
 import SignUpHeader from '~/components/molecules/SignUpHeader'
 import Separator from '~/components/atoms/Separator'
-import SignUpForm from '~/components/organisms/SignUpForm'
+import SignUpForm from '~/components/molecules/SignUpForm'
 import LeadToSignInUp from '~/components/atoms/LeadToSignInUp'
 
 const card = css({

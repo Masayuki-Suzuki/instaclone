@@ -7,6 +7,7 @@ type SnsLoginButtonPropsType = {
     brand?: IconName
     validation: boolean
     text: string
+    onClickButton?: () => void
 }
 
 const wrapper = css({
@@ -33,10 +34,11 @@ const icon = css({
     marginRight: '8px'
 })
 
-const SnsLoginButton = ({ brand, text, validation }: SnsLoginButtonPropsType): JSX.Element => {
+const SnsLoginButton = ({ brand, onClickButton, text, validation }: SnsLoginButtonPropsType): JSX.Element => {
     return (
         <div css={wrapper}>
             <button
+                onClick={onClickButton && (() => onClickButton())}
                 css={css`
                     ${button};
                     opacity: ${validation ? 1 : 0.4};
