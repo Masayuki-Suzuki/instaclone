@@ -24,20 +24,10 @@
     <div>
         {{range .Users}}
             <div style="border-bottom: solid 1px #ccc;">
-                <h2 style="font-size: 20px">{{.Id}}. {{.First_name}} {{.Last_name}}</h2>
-                <p>Gender:
-                    {{if eq .Gender 0}}
-                        Male
-                    {{else}}
-                        {{if eq .Gender 1}}
-                            Female
-                        {{else}}
-                            Other
-                        {{end}}
-                    {{end}}
-                </p>
-                <p>Age: {{.Age}}</p>
-                </div>
+                <h2 style="font-size: 20px">{{.FullName}}</h2>
+                <p>ID: {{.Uid}}</p>
+                <p>User Name: {{.Username}}</p>
+                <p>Email: {{.Email}}</p>
             </div>
         {{end}}
     </div>

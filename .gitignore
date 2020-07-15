@@ -4,3 +4,4 @@ db-data
 tmp
 go.sum
 docker-compose.yml
+credentials
