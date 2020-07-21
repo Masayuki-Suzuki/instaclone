@@ -5,10 +5,12 @@ import (
 	"fmt"
 	"time"
 	
+	"github.com/Masayuki-Suzuki/instaclone/database"
 	"github.com/Masayuki-Suzuki/instaclone/types"
 )
 
 func CreateNewUser(u types.User) error  {
+	db := database.GetDB()
 	query := fmt.Sprintf(
 		"INSERT INTO users (uid, name, username, email, created_at) values('%v', '%v', '%v', '%v', '%v')",
 		u.Uid, u.FullName, u.Username, u.Email, time.Now())

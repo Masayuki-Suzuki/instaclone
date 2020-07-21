@@ -9,6 +9,5 @@ func GetUser(uid string) (*sql.Rows, error) {
 }
 
 func GetAllUsers() (*sql.Rows, error) {
-	_, _ = db.Query("select uid, name, username, email from users")
-	return nil, nil
+	return db.Query("select uid, name, username, email from users")
 }
