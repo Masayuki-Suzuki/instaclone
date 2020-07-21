@@ -1,0 +1,7 @@
+database:
+    driver_name: mysql
+    db_name: instaclone
+    data_source_name: root:thisisrootpassword@tcp(mariadb:3306)/
+
+server:
+    port: 3000

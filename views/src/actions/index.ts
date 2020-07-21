@@ -23,7 +23,7 @@ export const googleLogin = (isSignedIn: boolean): ThunkActionSync => async dispa
             console.log(token)
             const res = await axios.post(
                 'http://localhost:8088/accounts/signup',
-                { uid: user?.uid },
+                { uid: user?.uid, emailSignUp: false },
                 {
                     headers: { 'Authorization': `Bearer ${token}` }
                 }
