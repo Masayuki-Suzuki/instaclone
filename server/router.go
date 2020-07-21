@@ -36,20 +36,19 @@ func getIndexPage(w http.ResponseWriter, r *http.Request) {
 	var users []types.User
 	
 	for rows.Next() {
-		var uid, name, email, username  string
-		err := rows.Scan(&uid, &name, &username, &email)
+		var uid, name, email, username, photoUrl string
+		err := rows.Scan(&uid, &name, &username, &email, &photoUrl)
 	
 		if err != nil {
 			fmt.Println(err)
 		}
-		fmt.Println(uid, name, username, email)
-		users = append(users, types.User{ username, uid, email, name })
+		users = append(users, types.User{ username, uid, email, name, photoUrl })
 	}
 	
 	PageData := SiteData{
 		Title:       "Test",
 		Description: "This is test for DB connection, read and write.",
-		PageTitle:   "DB Data",
+		PageTitle:   "Users",
 		ReactFilePath: "",
 		Users:       users,
 	}

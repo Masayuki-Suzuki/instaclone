@@ -24,7 +24,10 @@
     <div>
         {{range .Users}}
             <div style="border-bottom: solid 1px #ccc;">
-                <h2 style="font-size: 20px">{{.FullName}}</h2>
+                <div style="display: flex; align-items: center">
+                    <div><img style="border-radius: 100%" src="{{.PhotoUrl}}" alt="{{.Username}}" width="48"/></div>
+                    <h2 style="font-size: 20px; margin-left: 12px">{{.FullName}}</h2>
+                </div>
                 <p>ID: {{.Uid}}</p>
                 <p>User Name: {{.Username}}</p>
                 <p>Email: {{.Email}}</p>

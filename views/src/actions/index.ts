@@ -2,14 +2,6 @@ import axios from 'axios'
 import { ThunkActionSync } from '~/types/actions'
 import Firebase from '~/libs/Firebase'
 
-type GoogleLoginPayloads = {
-    uid: string
-    email: string
-    full_name: string
-    username: string
-    token: string
-}
-
 export const googleLogin = (isSignedIn: boolean): ThunkActionSync => async dispatch => {
     const { auth } = Firebase
     const provider = new auth.GoogleAuthProvider()
@@ -20,10 +12,10 @@ export const googleLogin = (isSignedIn: boolean): ThunkActionSync => async dispa
         const token = await auth().currentUser?.getIdToken()
 
         if (token) {
-            console.log(token)
+            const photoUrl = user?.photoURL || ''
             const res = await axios.post(
                 'http://localhost:8088/accounts/signup',
-                { uid: user?.uid, emailSignUp: false },
+                { uid: user?.uid, emailSignUp: false, photoUrl },
                 {
                     headers: { 'Authorization': `Bearer ${token}` }
                 }

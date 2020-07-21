@@ -9,9 +9,10 @@ type User struct {
 	Uid			string `json:"uid"`
 	Email		string `json:"email"`
 	FullName	string `json:"fullName"`
+	PhotoUrl	string `json:"photoUrl"`
 }
 
 type SignUpForm struct {
-	EmailSignUp bool
+	EmailSignUp bool `json:"emailSignUp"`
 	User
 }

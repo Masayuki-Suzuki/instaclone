@@ -1,34 +1,49 @@
 package controllers
 
 import (
+	"database/sql"
 	"log"
 	
 	"github.com/Masayuki-Suzuki/instaclone/model"
 )
 
-func CheckUserExistence(uid string) bool {
-	var uids []string
+func ScanUserRows(r *sql.Rows) bool {
+	var data []string
 	
-	// Get user from DB
-	rows, err := model.GetUser(uid)
-	if err != nil {
-		log.Println("DB Query Error: on checkUserExistence")
-		log.Println(err)
-	}
-	
-	if rows != nil {
-		for rows.Next() {
-			var dbUid string
-			err := rows.Scan(&dbUid)
+	if r != nil {
+		for r.Next() {
+			var d string
+			err := r.Scan(&d)
 			if err != nil {
 				log.Println("Scan error.")
-				log.Println(err)
+			} else {
+				data = append(data, d)
 			}
-			uids = append(uids, dbUid)
 		}
 	} else {
 		return false
 	}
 	
-	return len(uids) > 0
+	return len(data) > 0
+}
+
+func CheckUserExistenceByUId(uid string) (bool, error) {
+	// Get user from DB
+	rows, err := model.GetUserByUId(uid)
+	if err != nil {
+		log.Println("DB Query Error: on checkUserExistence")
+		log.Println(err)
+	}
+	
+	return ScanUserRows(rows), err
+}
+
+func CheckUserExistenceByUserName(username string) (bool, error) {
+	rows, err := model.GetUserByUserName(username)
+	if err != nil {
+		log.Println("DB Query Error: on checkUserExistence")
+		log.Println(err)
+	}
+	
+	return ScanUserRows(rows), err
 }
