@@ -10,8 +10,8 @@ require (
 	github.com/gorilla/handlers v1.4.2
 	github.com/gorilla/mux v1.7.4
 	github.com/spf13/viper v1.7.0
-	golang.org/x/sys v0.0.0-20200625212154-ddb9806d33ae // indirect
-	golang.org/x/tools v0.0.0-20200713235242-6acd2ab80ede
+	golang.org/x/sys v0.1.0 // indirect
+	golang.org/x/tools v0.0.0-20200713235242-6acd2ab80ede // indirect
 	google.golang.org/api v0.29.0
 	google.golang.org/genproto v0.0.0-20200714145754-f631a03bbd91 // indirect
 )
